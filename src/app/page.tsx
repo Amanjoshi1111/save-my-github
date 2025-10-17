@@ -1,5 +1,3 @@
-import { signIn } from "@/lib/auth-client";
-import { signInAction } from "./actions/auth";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { LogoutButton, LoginButton } from "./components/AuthButtons";
@@ -17,9 +15,11 @@ export default async function Home() {
         );
     }
 
+    console.log("FULL SESSION : ", JSON.stringify(session, null, 2));
+
     return (
         <div>
-            {session.user?.email} is logged in
+            {session.session.token} is logged in
             <LogoutButton />
         </div>
     );
