@@ -81,6 +81,19 @@ model Backup {
     @@map("backup")
 }
 
+model GithubWebhook {
+    id            String   @id @default(cuid())
+    repoId        Int      @unique
+    repoName      String
+    owner         String
+    webhookId     Int
+    webhookSecret String
+    accessToken   String
+    createdAt     DateTime @default(now())
+
+    @@map("github_webhook")
+}
+
 model Verification {
     id         String   @id @default(cuid())
     identifier String
