@@ -33,7 +33,9 @@ app.get("/repos", async (req: Request, res: Response) => {
     const pageNo = Number(req.query.pageNo) | 1;
     const pageSize = Number(req.query.pageSize) | 10;
 
-    const octokit = octokitConfig("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");
+    const { token } = req.body;
+
+    const octokit = octokitConfig(token);
 
     const response = await octokit.repos.listForAuthenticatedUser({
         per_page: pageSize,
@@ -53,12 +55,12 @@ app.get("/repos", async (req: Request, res: Response) => {
 });
 
 app.get("/download/:repoId", async (req: Request, res: Response) => {
-    const { repoId } = req.params;
+    const { repoId, token } = req.params;
 
     try {
         // Octokit SDK request by repository ID
 
-        const octokit = octokitConfig("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");
+        const octokit = octokitConfig(token);
 
         const { data: repo } = await octokit.request(
             "GET /repositories/{repository_id}",
@@ -197,10 +199,8 @@ app.post("/webhook/github/register", async (req: Request, res: Response) => {
     }
 });
 
-app.post("/webhook/github", async (req: Request, res: Response)=> {
-    res.status(200).json({msg : "OK"});
-})
+app.post("/webhook/github", async (req: Request, res: Response) => {
+    res.status(200).json({ msg: "OK" });
+});
 
 export default app;
-
-// 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
