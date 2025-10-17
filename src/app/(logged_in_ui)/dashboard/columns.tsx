@@ -1,7 +1,7 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-import { RepoSummary } from "../types";
+import { RepoSummary } from "../../types";
 import Link from "next/link";
 import { MoreHorizontal } from "lucide-react";
 
@@ -30,7 +30,7 @@ const handleBackup = async (repoId: number) => {
 export const columns: ColumnDef<RepoSummary>[] = [
     {
         accessorKey: "name",
-        header: () => <div className="text-left text-xl">REPOSITORY</div>,
+        header: () => <div className="text-left text-xl">Repository</div>,
         cell: ({ row }) => {
             const repoName: string = row.getValue("name");
             const repoUrl = row.original.url;
@@ -43,7 +43,7 @@ export const columns: ColumnDef<RepoSummary>[] = [
     },
     {
         accessorKey: "private",
-        header: () => <div className="text-left text-xl">PRIVATE</div>,
+        header: () => <div className="text-left text-xl">Access</div>,
     },
     {
         id: "actions",

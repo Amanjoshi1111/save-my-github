@@ -1,9 +1,9 @@
 import { auth } from "@/lib/auth";
 import { getGithubAccessToken } from "@/lib/github";
 import { headers } from "next/headers";
-import fetchRepos from "../actions/fetchRepos";
+import fetchRepos from "../../actions/fetchRepos";
 import { DataTable } from "./data-table";
-import { RepoSummary } from "../types";
+import { RepoSummary } from "../../types";
 import { columns } from "./columns";
 
 export default async function Dashboard() {

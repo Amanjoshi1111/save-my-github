@@ -1,4 +1,5 @@
 import { createAuthClient } from "better-auth/client";
+import { useRouter } from "next/navigation";
 const authClient = createAuthClient();
 
 export const signIn = async () => {
@@ -8,7 +9,12 @@ export const signIn = async () => {
     });
 };
 
-export const signOut = async () => {
+export const signOut = async (router: ReturnType<typeof useRouter>) => {
     await authClient.signOut({
+        fetchOptions: {
+            onSuccess: () => {
+                router.push("/login");
+            },
+        },
     });
 };
