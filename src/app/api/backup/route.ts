@@ -30,7 +30,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
 
         if (response.status == 200) {
             return NextResponse.json(
-                { message: "Backup started successfully!" },
+                { message: "Backup completed successfully!" },
                 { status: 200 }
             );
         }
@@ -39,10 +39,10 @@ export async function POST(req: NextRequest, res: NextResponse) {
             { message: "Backup failed : " + response.data.msg },
             { status: 500 }
         );
-    } catch (err) {
+    } catch (err: any) {
         console.error("Error in POST /api/backup", err);
         return NextResponse.json(
-            { error: "Internal Server Error" },
+            { error: (err.message) ? err.message : "Internal Server Error" },
             { status: 500 }
         );
     }

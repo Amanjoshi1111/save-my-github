@@ -6,7 +6,6 @@
 
 generator client {
     provider = "prisma-client-js"
-    output   = "../src/generated/prisma"
 }
 
 datasource db {
@@ -70,6 +69,16 @@ model Account {
     updatedAt             DateTime  @updatedAt
 
     @@map("account")
+}
+
+model Backup {
+    id             String    @id @default(cuid())
+    repoId         Int       @unique
+    repoName       String
+    owner          String
+    lastBackupDate DateTime?
+
+    @@map("backup")
 }
 
 model Verification {

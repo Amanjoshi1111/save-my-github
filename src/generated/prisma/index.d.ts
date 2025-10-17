@@ -34,6 +34,11 @@ export type Session = $Result.DefaultSelection<Prisma.$SessionPayload>
  */
 export type Account = $Result.DefaultSelection<Prisma.$AccountPayload>
 /**
+ * Model Backup
+ * 
+ */
+export type Backup = $Result.DefaultSelection<Prisma.$BackupPayload>
+/**
  * Model Verification
  * 
  */
@@ -196,6 +201,16 @@ export class PrismaClient<
     * ```
     */
   get account(): Prisma.AccountDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.backup`: Exposes CRUD operations for the **Backup** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Backups
+    * const backups = await prisma.backup.findMany()
+    * ```
+    */
+  get backup(): Prisma.BackupDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.verification`: Exposes CRUD operations for the **Verification** model.
@@ -650,6 +665,7 @@ export namespace Prisma {
     Post: 'Post',
     Session: 'Session',
     Account: 'Account',
+    Backup: 'Backup',
     Verification: 'Verification'
   };
 
@@ -669,7 +685,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "post" | "session" | "account" | "verification"
+      modelProps: "user" | "post" | "session" | "account" | "backup" | "verification"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -969,6 +985,80 @@ export namespace Prisma {
           }
         }
       }
+      Backup: {
+        payload: Prisma.$BackupPayload<ExtArgs>
+        fields: Prisma.BackupFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.BackupFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BackupPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.BackupFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BackupPayload>
+          }
+          findFirst: {
+            args: Prisma.BackupFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BackupPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.BackupFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BackupPayload>
+          }
+          findMany: {
+            args: Prisma.BackupFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BackupPayload>[]
+          }
+          create: {
+            args: Prisma.BackupCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BackupPayload>
+          }
+          createMany: {
+            args: Prisma.BackupCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.BackupCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BackupPayload>[]
+          }
+          delete: {
+            args: Prisma.BackupDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BackupPayload>
+          }
+          update: {
+            args: Prisma.BackupUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BackupPayload>
+          }
+          deleteMany: {
+            args: Prisma.BackupDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.BackupUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.BackupUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BackupPayload>[]
+          }
+          upsert: {
+            args: Prisma.BackupUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BackupPayload>
+          }
+          aggregate: {
+            args: Prisma.BackupAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateBackup>
+          }
+          groupBy: {
+            args: Prisma.BackupGroupByArgs<ExtArgs>
+            result: $Utils.Optional<BackupGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.BackupCountArgs<ExtArgs>
+            result: $Utils.Optional<BackupCountAggregateOutputType> | number
+          }
+        }
+      }
       Verification: {
         payload: Prisma.$VerificationPayload<ExtArgs>
         fields: Prisma.VerificationFieldRefs
@@ -1143,6 +1233,7 @@ export namespace Prisma {
     post?: PostOmit
     session?: SessionOmit
     account?: AccountOmit
+    backup?: BackupOmit
     verification?: VerificationOmit
   }
 
@@ -5742,6 +5833,1022 @@ export namespace Prisma {
 
 
   /**
+   * Model Backup
+   */
+
+  export type AggregateBackup = {
+    _count: BackupCountAggregateOutputType | null
+    _avg: BackupAvgAggregateOutputType | null
+    _sum: BackupSumAggregateOutputType | null
+    _min: BackupMinAggregateOutputType | null
+    _max: BackupMaxAggregateOutputType | null
+  }
+
+  export type BackupAvgAggregateOutputType = {
+    repoId: number | null
+  }
+
+  export type BackupSumAggregateOutputType = {
+    repoId: number | null
+  }
+
+  export type BackupMinAggregateOutputType = {
+    id: string | null
+    repoId: number | null
+    owner: string | null
+    lastBackupDate: Date | null
+  }
+
+  export type BackupMaxAggregateOutputType = {
+    id: string | null
+    repoId: number | null
+    owner: string | null
+    lastBackupDate: Date | null
+  }
+
+  export type BackupCountAggregateOutputType = {
+    id: number
+    repoId: number
+    owner: number
+    lastBackupDate: number
+    _all: number
+  }
+
+
+  export type BackupAvgAggregateInputType = {
+    repoId?: true
+  }
+
+  export type BackupSumAggregateInputType = {
+    repoId?: true
+  }
+
+  export type BackupMinAggregateInputType = {
+    id?: true
+    repoId?: true
+    owner?: true
+    lastBackupDate?: true
+  }
+
+  export type BackupMaxAggregateInputType = {
+    id?: true
+    repoId?: true
+    owner?: true
+    lastBackupDate?: true
+  }
+
+  export type BackupCountAggregateInputType = {
+    id?: true
+    repoId?: true
+    owner?: true
+    lastBackupDate?: true
+    _all?: true
+  }
+
+  export type BackupAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Backup to aggregate.
+     */
+    where?: BackupWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Backups to fetch.
+     */
+    orderBy?: BackupOrderByWithRelationInput | BackupOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: BackupWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Backups from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Backups.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Backups
+    **/
+    _count?: true | BackupCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: BackupAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: BackupSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: BackupMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: BackupMaxAggregateInputType
+  }
+
+  export type GetBackupAggregateType<T extends BackupAggregateArgs> = {
+        [P in keyof T & keyof AggregateBackup]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateBackup[P]>
+      : GetScalarType<T[P], AggregateBackup[P]>
+  }
+
+
+
+
+  export type BackupGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: BackupWhereInput
+    orderBy?: BackupOrderByWithAggregationInput | BackupOrderByWithAggregationInput[]
+    by: BackupScalarFieldEnum[] | BackupScalarFieldEnum
+    having?: BackupScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: BackupCountAggregateInputType | true
+    _avg?: BackupAvgAggregateInputType
+    _sum?: BackupSumAggregateInputType
+    _min?: BackupMinAggregateInputType
+    _max?: BackupMaxAggregateInputType
+  }
+
+  export type BackupGroupByOutputType = {
+    id: string
+    repoId: number
+    owner: string
+    lastBackupDate: Date | null
+    _count: BackupCountAggregateOutputType | null
+    _avg: BackupAvgAggregateOutputType | null
+    _sum: BackupSumAggregateOutputType | null
+    _min: BackupMinAggregateOutputType | null
+    _max: BackupMaxAggregateOutputType | null
+  }
+
+  type GetBackupGroupByPayload<T extends BackupGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<BackupGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof BackupGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], BackupGroupByOutputType[P]>
+            : GetScalarType<T[P], BackupGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type BackupSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    repoId?: boolean
+    owner?: boolean
+    lastBackupDate?: boolean
+  }, ExtArgs["result"]["backup"]>
+
+  export type BackupSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    repoId?: boolean
+    owner?: boolean
+    lastBackupDate?: boolean
+  }, ExtArgs["result"]["backup"]>
+
+  export type BackupSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    repoId?: boolean
+    owner?: boolean
+    lastBackupDate?: boolean
+  }, ExtArgs["result"]["backup"]>
+
+  export type BackupSelectScalar = {
+    id?: boolean
+    repoId?: boolean
+    owner?: boolean
+    lastBackupDate?: boolean
+  }
+
+  export type BackupOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "repoId" | "owner" | "lastBackupDate", ExtArgs["result"]["backup"]>
+
+  export type $BackupPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Backup"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      repoId: number
+      owner: string
+      lastBackupDate: Date | null
+    }, ExtArgs["result"]["backup"]>
+    composites: {}
+  }
+
+  type BackupGetPayload<S extends boolean | null | undefined | BackupDefaultArgs> = $Result.GetResult<Prisma.$BackupPayload, S>
+
+  type BackupCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<BackupFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: BackupCountAggregateInputType | true
+    }
+
+  export interface BackupDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Backup'], meta: { name: 'Backup' } }
+    /**
+     * Find zero or one Backup that matches the filter.
+     * @param {BackupFindUniqueArgs} args - Arguments to find a Backup
+     * @example
+     * // Get one Backup
+     * const backup = await prisma.backup.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends BackupFindUniqueArgs>(args: SelectSubset<T, BackupFindUniqueArgs<ExtArgs>>): Prisma__BackupClient<$Result.GetResult<Prisma.$BackupPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Backup that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {BackupFindUniqueOrThrowArgs} args - Arguments to find a Backup
+     * @example
+     * // Get one Backup
+     * const backup = await prisma.backup.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends BackupFindUniqueOrThrowArgs>(args: SelectSubset<T, BackupFindUniqueOrThrowArgs<ExtArgs>>): Prisma__BackupClient<$Result.GetResult<Prisma.$BackupPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Backup that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BackupFindFirstArgs} args - Arguments to find a Backup
+     * @example
+     * // Get one Backup
+     * const backup = await prisma.backup.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends BackupFindFirstArgs>(args?: SelectSubset<T, BackupFindFirstArgs<ExtArgs>>): Prisma__BackupClient<$Result.GetResult<Prisma.$BackupPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Backup that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BackupFindFirstOrThrowArgs} args - Arguments to find a Backup
+     * @example
+     * // Get one Backup
+     * const backup = await prisma.backup.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends BackupFindFirstOrThrowArgs>(args?: SelectSubset<T, BackupFindFirstOrThrowArgs<ExtArgs>>): Prisma__BackupClient<$Result.GetResult<Prisma.$BackupPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Backups that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BackupFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Backups
+     * const backups = await prisma.backup.findMany()
+     * 
+     * // Get first 10 Backups
+     * const backups = await prisma.backup.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const backupWithIdOnly = await prisma.backup.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends BackupFindManyArgs>(args?: SelectSubset<T, BackupFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BackupPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Backup.
+     * @param {BackupCreateArgs} args - Arguments to create a Backup.
+     * @example
+     * // Create one Backup
+     * const Backup = await prisma.backup.create({
+     *   data: {
+     *     // ... data to create a Backup
+     *   }
+     * })
+     * 
+     */
+    create<T extends BackupCreateArgs>(args: SelectSubset<T, BackupCreateArgs<ExtArgs>>): Prisma__BackupClient<$Result.GetResult<Prisma.$BackupPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Backups.
+     * @param {BackupCreateManyArgs} args - Arguments to create many Backups.
+     * @example
+     * // Create many Backups
+     * const backup = await prisma.backup.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends BackupCreateManyArgs>(args?: SelectSubset<T, BackupCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Backups and returns the data saved in the database.
+     * @param {BackupCreateManyAndReturnArgs} args - Arguments to create many Backups.
+     * @example
+     * // Create many Backups
+     * const backup = await prisma.backup.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Backups and only return the `id`
+     * const backupWithIdOnly = await prisma.backup.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends BackupCreateManyAndReturnArgs>(args?: SelectSubset<T, BackupCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BackupPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Backup.
+     * @param {BackupDeleteArgs} args - Arguments to delete one Backup.
+     * @example
+     * // Delete one Backup
+     * const Backup = await prisma.backup.delete({
+     *   where: {
+     *     // ... filter to delete one Backup
+     *   }
+     * })
+     * 
+     */
+    delete<T extends BackupDeleteArgs>(args: SelectSubset<T, BackupDeleteArgs<ExtArgs>>): Prisma__BackupClient<$Result.GetResult<Prisma.$BackupPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Backup.
+     * @param {BackupUpdateArgs} args - Arguments to update one Backup.
+     * @example
+     * // Update one Backup
+     * const backup = await prisma.backup.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends BackupUpdateArgs>(args: SelectSubset<T, BackupUpdateArgs<ExtArgs>>): Prisma__BackupClient<$Result.GetResult<Prisma.$BackupPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Backups.
+     * @param {BackupDeleteManyArgs} args - Arguments to filter Backups to delete.
+     * @example
+     * // Delete a few Backups
+     * const { count } = await prisma.backup.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends BackupDeleteManyArgs>(args?: SelectSubset<T, BackupDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Backups.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BackupUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Backups
+     * const backup = await prisma.backup.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends BackupUpdateManyArgs>(args: SelectSubset<T, BackupUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Backups and returns the data updated in the database.
+     * @param {BackupUpdateManyAndReturnArgs} args - Arguments to update many Backups.
+     * @example
+     * // Update many Backups
+     * const backup = await prisma.backup.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Backups and only return the `id`
+     * const backupWithIdOnly = await prisma.backup.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends BackupUpdateManyAndReturnArgs>(args: SelectSubset<T, BackupUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BackupPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Backup.
+     * @param {BackupUpsertArgs} args - Arguments to update or create a Backup.
+     * @example
+     * // Update or create a Backup
+     * const backup = await prisma.backup.upsert({
+     *   create: {
+     *     // ... data to create a Backup
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Backup we want to update
+     *   }
+     * })
+     */
+    upsert<T extends BackupUpsertArgs>(args: SelectSubset<T, BackupUpsertArgs<ExtArgs>>): Prisma__BackupClient<$Result.GetResult<Prisma.$BackupPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Backups.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BackupCountArgs} args - Arguments to filter Backups to count.
+     * @example
+     * // Count the number of Backups
+     * const count = await prisma.backup.count({
+     *   where: {
+     *     // ... the filter for the Backups we want to count
+     *   }
+     * })
+    **/
+    count<T extends BackupCountArgs>(
+      args?: Subset<T, BackupCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], BackupCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Backup.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BackupAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends BackupAggregateArgs>(args: Subset<T, BackupAggregateArgs>): Prisma.PrismaPromise<GetBackupAggregateType<T>>
+
+    /**
+     * Group by Backup.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BackupGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends BackupGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: BackupGroupByArgs['orderBy'] }
+        : { orderBy?: BackupGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, BackupGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetBackupGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Backup model
+   */
+  readonly fields: BackupFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Backup.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__BackupClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Backup model
+   */
+  interface BackupFieldRefs {
+    readonly id: FieldRef<"Backup", 'String'>
+    readonly repoId: FieldRef<"Backup", 'Int'>
+    readonly owner: FieldRef<"Backup", 'String'>
+    readonly lastBackupDate: FieldRef<"Backup", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Backup findUnique
+   */
+  export type BackupFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Backup
+     */
+    select?: BackupSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Backup
+     */
+    omit?: BackupOmit<ExtArgs> | null
+    /**
+     * Filter, which Backup to fetch.
+     */
+    where: BackupWhereUniqueInput
+  }
+
+  /**
+   * Backup findUniqueOrThrow
+   */
+  export type BackupFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Backup
+     */
+    select?: BackupSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Backup
+     */
+    omit?: BackupOmit<ExtArgs> | null
+    /**
+     * Filter, which Backup to fetch.
+     */
+    where: BackupWhereUniqueInput
+  }
+
+  /**
+   * Backup findFirst
+   */
+  export type BackupFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Backup
+     */
+    select?: BackupSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Backup
+     */
+    omit?: BackupOmit<ExtArgs> | null
+    /**
+     * Filter, which Backup to fetch.
+     */
+    where?: BackupWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Backups to fetch.
+     */
+    orderBy?: BackupOrderByWithRelationInput | BackupOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Backups.
+     */
+    cursor?: BackupWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Backups from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Backups.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Backups.
+     */
+    distinct?: BackupScalarFieldEnum | BackupScalarFieldEnum[]
+  }
+
+  /**
+   * Backup findFirstOrThrow
+   */
+  export type BackupFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Backup
+     */
+    select?: BackupSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Backup
+     */
+    omit?: BackupOmit<ExtArgs> | null
+    /**
+     * Filter, which Backup to fetch.
+     */
+    where?: BackupWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Backups to fetch.
+     */
+    orderBy?: BackupOrderByWithRelationInput | BackupOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Backups.
+     */
+    cursor?: BackupWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Backups from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Backups.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Backups.
+     */
+    distinct?: BackupScalarFieldEnum | BackupScalarFieldEnum[]
+  }
+
+  /**
+   * Backup findMany
+   */
+  export type BackupFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Backup
+     */
+    select?: BackupSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Backup
+     */
+    omit?: BackupOmit<ExtArgs> | null
+    /**
+     * Filter, which Backups to fetch.
+     */
+    where?: BackupWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Backups to fetch.
+     */
+    orderBy?: BackupOrderByWithRelationInput | BackupOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Backups.
+     */
+    cursor?: BackupWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Backups from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Backups.
+     */
+    skip?: number
+    distinct?: BackupScalarFieldEnum | BackupScalarFieldEnum[]
+  }
+
+  /**
+   * Backup create
+   */
+  export type BackupCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Backup
+     */
+    select?: BackupSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Backup
+     */
+    omit?: BackupOmit<ExtArgs> | null
+    /**
+     * The data needed to create a Backup.
+     */
+    data: XOR<BackupCreateInput, BackupUncheckedCreateInput>
+  }
+
+  /**
+   * Backup createMany
+   */
+  export type BackupCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Backups.
+     */
+    data: BackupCreateManyInput | BackupCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Backup createManyAndReturn
+   */
+  export type BackupCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Backup
+     */
+    select?: BackupSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Backup
+     */
+    omit?: BackupOmit<ExtArgs> | null
+    /**
+     * The data used to create many Backups.
+     */
+    data: BackupCreateManyInput | BackupCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Backup update
+   */
+  export type BackupUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Backup
+     */
+    select?: BackupSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Backup
+     */
+    omit?: BackupOmit<ExtArgs> | null
+    /**
+     * The data needed to update a Backup.
+     */
+    data: XOR<BackupUpdateInput, BackupUncheckedUpdateInput>
+    /**
+     * Choose, which Backup to update.
+     */
+    where: BackupWhereUniqueInput
+  }
+
+  /**
+   * Backup updateMany
+   */
+  export type BackupUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Backups.
+     */
+    data: XOR<BackupUpdateManyMutationInput, BackupUncheckedUpdateManyInput>
+    /**
+     * Filter which Backups to update
+     */
+    where?: BackupWhereInput
+    /**
+     * Limit how many Backups to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Backup updateManyAndReturn
+   */
+  export type BackupUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Backup
+     */
+    select?: BackupSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Backup
+     */
+    omit?: BackupOmit<ExtArgs> | null
+    /**
+     * The data used to update Backups.
+     */
+    data: XOR<BackupUpdateManyMutationInput, BackupUncheckedUpdateManyInput>
+    /**
+     * Filter which Backups to update
+     */
+    where?: BackupWhereInput
+    /**
+     * Limit how many Backups to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Backup upsert
+   */
+  export type BackupUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Backup
+     */
+    select?: BackupSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Backup
+     */
+    omit?: BackupOmit<ExtArgs> | null
+    /**
+     * The filter to search for the Backup to update in case it exists.
+     */
+    where: BackupWhereUniqueInput
+    /**
+     * In case the Backup found by the `where` argument doesn't exist, create a new Backup with this data.
+     */
+    create: XOR<BackupCreateInput, BackupUncheckedCreateInput>
+    /**
+     * In case the Backup was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<BackupUpdateInput, BackupUncheckedUpdateInput>
+  }
+
+  /**
+   * Backup delete
+   */
+  export type BackupDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Backup
+     */
+    select?: BackupSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Backup
+     */
+    omit?: BackupOmit<ExtArgs> | null
+    /**
+     * Filter which Backup to delete.
+     */
+    where: BackupWhereUniqueInput
+  }
+
+  /**
+   * Backup deleteMany
+   */
+  export type BackupDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Backups to delete
+     */
+    where?: BackupWhereInput
+    /**
+     * Limit how many Backups to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Backup without action
+   */
+  export type BackupDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Backup
+     */
+    select?: BackupSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Backup
+     */
+    omit?: BackupOmit<ExtArgs> | null
+  }
+
+
+  /**
    * Model Verification
    */
 
@@ -6820,6 +7927,16 @@ export namespace Prisma {
   export type AccountScalarFieldEnum = (typeof AccountScalarFieldEnum)[keyof typeof AccountScalarFieldEnum]
 
 
+  export const BackupScalarFieldEnum: {
+    id: 'id',
+    repoId: 'repoId',
+    owner: 'owner',
+    lastBackupDate: 'lastBackupDate'
+  };
+
+  export type BackupScalarFieldEnum = (typeof BackupScalarFieldEnum)[keyof typeof BackupScalarFieldEnum]
+
+
   export const VerificationScalarFieldEnum: {
     id: 'id',
     identifier: 'identifier',
@@ -6907,6 +8024,20 @@ export namespace Prisma {
    * Reference to a field of type 'Int[]'
    */
   export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'Float'
+   */
+  export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
+    
+
+
+  /**
+   * Reference to a field of type 'Float[]'
+   */
+  export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
     
   /**
    * Deep Input Types
@@ -7202,6 +8333,55 @@ export namespace Prisma {
     password?: StringNullableWithAggregatesFilter<"Account"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Account"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Account"> | Date | string
+  }
+
+  export type BackupWhereInput = {
+    AND?: BackupWhereInput | BackupWhereInput[]
+    OR?: BackupWhereInput[]
+    NOT?: BackupWhereInput | BackupWhereInput[]
+    id?: StringFilter<"Backup"> | string
+    repoId?: IntFilter<"Backup"> | number
+    owner?: StringFilter<"Backup"> | string
+    lastBackupDate?: DateTimeNullableFilter<"Backup"> | Date | string | null
+  }
+
+  export type BackupOrderByWithRelationInput = {
+    id?: SortOrder
+    repoId?: SortOrder
+    owner?: SortOrder
+    lastBackupDate?: SortOrderInput | SortOrder
+  }
+
+  export type BackupWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    repoId?: number
+    AND?: BackupWhereInput | BackupWhereInput[]
+    OR?: BackupWhereInput[]
+    NOT?: BackupWhereInput | BackupWhereInput[]
+    owner?: StringFilter<"Backup"> | string
+    lastBackupDate?: DateTimeNullableFilter<"Backup"> | Date | string | null
+  }, "id" | "repoId">
+
+  export type BackupOrderByWithAggregationInput = {
+    id?: SortOrder
+    repoId?: SortOrder
+    owner?: SortOrder
+    lastBackupDate?: SortOrderInput | SortOrder
+    _count?: BackupCountOrderByAggregateInput
+    _avg?: BackupAvgOrderByAggregateInput
+    _max?: BackupMaxOrderByAggregateInput
+    _min?: BackupMinOrderByAggregateInput
+    _sum?: BackupSumOrderByAggregateInput
+  }
+
+  export type BackupScalarWhereWithAggregatesInput = {
+    AND?: BackupScalarWhereWithAggregatesInput | BackupScalarWhereWithAggregatesInput[]
+    OR?: BackupScalarWhereWithAggregatesInput[]
+    NOT?: BackupScalarWhereWithAggregatesInput | BackupScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"Backup"> | string
+    repoId?: IntWithAggregatesFilter<"Backup"> | number
+    owner?: StringWithAggregatesFilter<"Backup"> | string
+    lastBackupDate?: DateTimeNullableWithAggregatesFilter<"Backup"> | Date | string | null
   }
 
   export type VerificationWhereInput = {
@@ -7585,6 +8765,55 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type BackupCreateInput = {
+    id?: string
+    repoId: number
+    owner: string
+    lastBackupDate?: Date | string | null
+  }
+
+  export type BackupUncheckedCreateInput = {
+    id?: string
+    repoId: number
+    owner: string
+    lastBackupDate?: Date | string | null
+  }
+
+  export type BackupUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    repoId?: IntFieldUpdateOperationsInput | number
+    owner?: StringFieldUpdateOperationsInput | string
+    lastBackupDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type BackupUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    repoId?: IntFieldUpdateOperationsInput | number
+    owner?: StringFieldUpdateOperationsInput | string
+    lastBackupDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type BackupCreateManyInput = {
+    id?: string
+    repoId: number
+    owner: string
+    lastBackupDate?: Date | string | null
+  }
+
+  export type BackupUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    repoId?: IntFieldUpdateOperationsInput | number
+    owner?: StringFieldUpdateOperationsInput | string
+    lastBackupDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type BackupUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    repoId?: IntFieldUpdateOperationsInput | number
+    owner?: StringFieldUpdateOperationsInput | string
+    lastBackupDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
   export type VerificationCreateInput = {
     id?: string
     identifier: string
@@ -7952,6 +9181,62 @@ export namespace Prisma {
     _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
+  export type IntFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntFilter<$PrismaModel> | number
+  }
+
+  export type BackupCountOrderByAggregateInput = {
+    id?: SortOrder
+    repoId?: SortOrder
+    owner?: SortOrder
+    lastBackupDate?: SortOrder
+  }
+
+  export type BackupAvgOrderByAggregateInput = {
+    repoId?: SortOrder
+  }
+
+  export type BackupMaxOrderByAggregateInput = {
+    id?: SortOrder
+    repoId?: SortOrder
+    owner?: SortOrder
+    lastBackupDate?: SortOrder
+  }
+
+  export type BackupMinOrderByAggregateInput = {
+    id?: SortOrder
+    repoId?: SortOrder
+    owner?: SortOrder
+    lastBackupDate?: SortOrder
+  }
+
+  export type BackupSumOrderByAggregateInput = {
+    repoId?: SortOrder
+  }
+
+  export type IntWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedIntFilter<$PrismaModel>
+    _min?: NestedIntFilter<$PrismaModel>
+    _max?: NestedIntFilter<$PrismaModel>
+  }
+
   export type VerificationCountOrderByAggregateInput = {
     id?: SortOrder
     identifier?: SortOrder
@@ -8167,6 +9452,14 @@ export namespace Prisma {
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutAccountsInput, UserUpdateWithoutAccountsInput>, UserUncheckedUpdateWithoutAccountsInput>
   }
 
+  export type IntFieldUpdateOperationsInput = {
+    set?: number
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
   export type NestedStringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -8312,6 +9605,33 @@ export namespace Prisma {
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedDateTimeNullableFilter<$PrismaModel>
     _max?: NestedDateTimeNullableFilter<$PrismaModel>
+  }
+
+  export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedIntFilter<$PrismaModel>
+    _min?: NestedIntFilter<$PrismaModel>
+    _max?: NestedIntFilter<$PrismaModel>
+  }
+
+  export type NestedFloatFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatFilter<$PrismaModel> | number
   }
 
   export type PostCreateWithoutAuthorInput = {

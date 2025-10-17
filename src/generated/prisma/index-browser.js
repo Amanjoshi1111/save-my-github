@@ -165,6 +165,13 @@ exports.Prisma.AccountScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.BackupScalarFieldEnum = {
+  id: 'id',
+  repoId: 'repoId',
+  owner: 'owner',
+  lastBackupDate: 'lastBackupDate'
+};
+
 exports.Prisma.VerificationScalarFieldEnum = {
   id: 'id',
   identifier: 'identifier',
@@ -195,6 +202,7 @@ exports.Prisma.ModelName = {
   Post: 'Post',
   Session: 'Session',
   Account: 'Account',
+  Backup: 'Backup',
   Verification: 'Verification'
 };
 

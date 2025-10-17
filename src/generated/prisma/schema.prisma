@@ -72,6 +72,15 @@ model Account {
   @@map("account")
 }
 
+model Backup {
+  id             String    @id @default(cuid())
+  repoId         Int       @unique
+  owner          String
+  lastBackupDate DateTime?
+
+  @@map("backup")
+}
+
 model Verification {
   id         String   @id @default(cuid())
   identifier String
