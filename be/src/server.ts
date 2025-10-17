@@ -5,7 +5,7 @@ import type { Request, Response, Express } from "express";
 import { Worker } from "worker_threads";
 import path from "path";
 import { fileURLToPath } from "url";
-import prisma from "./prisma.js";
+import {prisma} from "./prisma.js";
 
 const app: Express = express();
 
