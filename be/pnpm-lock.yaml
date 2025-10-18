@@ -11,6 +11,9 @@ importers:
       '@aws-sdk/client-s3':
         specifier: ^3.911.0
         version: 3.911.0
+      '@octokit/request-error':
+        specifier: ^7.0.1
+        version: 7.0.1
       '@octokit/rest':
         specifier: ^22.0.0
         version: 22.0.0
