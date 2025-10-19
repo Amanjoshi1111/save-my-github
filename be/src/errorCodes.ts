@@ -34,6 +34,7 @@ export const ErrorCodes: ErrorCodeMap = {
     BE002: createErrorObject(400, "invalid githubToken present in request headers"),
     BE003: createErrorObject(400,  "Invalid signature"),
     BE004: createErrorObject(400, "Invalid Headers"),
-    BE005: createErrorObject(400, "No such webhook register"),
+    BE005:createErrorObject(400, "BAD REQUEST"),
+    BE006: createErrorObject(401, "Unauthorized"),
     BE099: createErrorObject(500, "INTERNAL SERVER ERROR"),
 };

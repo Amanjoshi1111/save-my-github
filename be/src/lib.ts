@@ -31,24 +31,22 @@ export async function safeOctokitRequest<T>(fn: () => Promise<T>): Promise<T> {
     }
 }
 
-export async function validateGithubToken(
-    req: Request,
-    res: Response,
-    next: NextFunction
-) {
-    const githubToken: string = req.headers[githubTokenHeader] as string;
+export const validateGithubToken = asyncHandler(
+    async (req: Request, res: Response, next: NextFunction) => {
+        const githubToken: string = req.headers[githubTokenHeader] as string;
 
-    if (githubToken == undefined) {
-        throw new CustomException("BE002");
+        if (githubToken == undefined) {
+            throw new CustomException("BE002");
+        }
+
+        const octokit = octokitConfig(githubToken);
+
+        const { data: repo } = await safeOctokitRequest(() =>
+            octokit.request("GET /user")
+        );
+
+        req.octokit = octokit;
+        req.githubToken = githubToken;
+        next();
     }
-
-    const octokit = octokitConfig(githubToken);
-
-    const { data: repo } = await safeOctokitRequest(() =>
-        octokit.request("GET /user")
-    );
-
-    req.octokit = octokit;
-    req.githubToken = githubToken;
-    next();
-}
+);
