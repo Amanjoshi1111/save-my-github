@@ -5,7 +5,7 @@ declare global {
         interface Request {
             octokit?: Octokit;
             githubToken?: string;
+            githubUser?: string;
         }
     }
 }
-

@@ -1,12 +1,17 @@
 import { Worker } from "bullmq";
 import { REPOSITORY_BACKUP_QUEUE } from "../lib/constants.js";
 import dotenv from "dotenv";
+import { initBackup } from "../services/backupService.js";
 dotenv.config();
 
 const worker = new Worker(
     REPOSITORY_BACKUP_QUEUE,
     async (job) => {
-        console.log("consuming job : ", job.id, job.data);
+        console.log(
+            `Consuming Job : JobId : ${job.id}, JobData: ${job.data.repoId}`
+        );
+        const message = await initBackup(job.data.repoId);
+        console.log(message);
     },
     {
         connection: {
@@ -17,9 +22,9 @@ const worker = new Worker(
 );
 
 worker.on("failed", (job, err) => {
-    console.error(`Job ${job?.id} failed:`, err);
+    console.error(`Job : ${job?.id} failed:`, err);
 });
 
 worker.on("completed", (job) => {
-    console.log(`Job ${job.id} completed!`);
+    console.log(`Job : ${job.id} completed!`);
 });

@@ -44,8 +44,6 @@ export async function fetchRepoList(
     return userRepoList;
 }
 
-
-
 export async function registerWebhook(
     repoId: number,
     githubToken: string,

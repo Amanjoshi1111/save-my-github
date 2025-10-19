@@ -47,6 +47,8 @@ export const validateGithubToken = asyncHandler(
 
         req.octokit = octokit;
         req.githubToken = githubToken;
+        req.githubUser = repo.login;
+
         next();
     }
 );

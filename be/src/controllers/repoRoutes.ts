@@ -1,5 +1,9 @@
 import { NextFunction, Request, Response, Router } from "express";
-import { asyncHandler, safeOctokitRequest } from "../lib/helper.js";
+import {
+    asyncHandler,
+    octokitConfig,
+    safeOctokitRequest,
+} from "../lib/helper.js";
 import { Worker } from "worker_threads";
 import { Octokit } from "@octokit/rest";
 import { fileURLToPath } from "url";
@@ -9,6 +13,7 @@ import CustomException from "../errorHandling/CustomException.js";
 import z from "zod";
 import { fetchRepoList, registerWebhook } from "../services/githubService.js";
 import { GITHUB_TOKEN_HEADER } from "../lib/constants.js";
+import RepoBackup from "../queue/repoBackup.queue.js";
 
 const webhookSchema = z.object({
     repoId: z.number().positive(),
@@ -24,8 +29,8 @@ export default repoRouter
             const pageSize = Number(req.query.pageSize) || 10;
             const octokit = req.octokit as Octokit;
 
-            const userRepoList = fetchRepoList(pageNo, pageSize, octokit);
-            return res.json(userRepoList);
+            const userRepoList = await fetchRepoList(pageNo, pageSize, octokit);
+            return res.status(200).json(userRepoList);
         })
     )
     .post(
@@ -33,61 +38,33 @@ export default repoRouter
         asyncHandler(
             async (req: Request, res: Response, next: NextFunction) => {
                 const { repoId } = req.params;
+                const repoIdNum = Number(repoId);
 
+                const githubToken = req.githubToken as string;
                 const octokit = req.octokit as Octokit;
-                const token = req.headers["githubToken"] as string;
+                const githubUser = req.githubUser as string;
 
-                await safeOctokitRequest(() => octokit.request("GET /user"));
+                if (isNaN(repoIdNum)) {
+                    throw new CustomException("BE004", "RepoId should be a valid number");
+                }
 
-                const __filename = fileURLToPath(import.meta.url);
-                const __dirname = path.dirname(__filename);
+                const { data: repoList } = await safeOctokitRequest(() =>
+                    octokit.repos.listForUser({
+                        username: githubUser,
+                    })
+                );
 
-                console.log("Required Details : ", {
-                    token,
-                    repoId,
-                    __dirname,
-                });
+                const repoData = repoList.find((r) => r.id === repoIdNum);
 
-                const workerPath = path.resolve(__dirname, "../../script.js");
-                console.log("worketPath : ", workerPath);
-                const worker = new Worker(workerPath, {
-                    workerData: { repoId, auth: token },
-                });
+                if (!repoData) {
+                    throw new CustomException("BE004", "No such repo present for given repoId");
+                }
 
-                worker.once("message", async (response) => {
-                    try {
-                        const success = response.success;
-                        if (success) {
-                            await prisma.backup.upsert({
-                                where: {
-                                    repoId: Number(repoId),
-                                },
-                                update: {
-                                    lastBackupDate: new Date(),
-                                },
-                                create: {
-                                    owner: response.owner,
-                                    repoId: Number(repoId),
-                                    repoName: response.repoName,
-                                    lastBackupDate: new Date(),
-                                },
-                            });
-                            return res
-                                .status(200)
-                                .json({ message: response.msg });
-                        }
-                        console.log("error msg : ", response.error.message);
-                        throw new CustomException(
-                            "BE099",
-                            response.error.message
-                        );
-                    } catch (err) {
-                        next(err);
-                    }
-                });
-                worker.once("error", (err) => {
-                    next(new CustomException("BE099", err.message));
-                });
+                const job = await RepoBackup.add(Number(repoId));
+
+                return res
+                    .status(200)
+                    .send({ message: "Pushed to queue", jobId: job.id });
             }
         )
     )
