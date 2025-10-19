@@ -3,18 +3,24 @@ import { Request, Response, Router } from "express";
 import { prisma } from "../prisma.js";
 import CustomException from "../CustomException.js";
 import { Webhooks } from "@octokit/webhooks";
+import { backupRepository } from "../services/backupService.js";
 
 const webhookRouter: Router = Router();
 
 export default webhookRouter.post(
     "/github",
     asyncHandler(async (req: Request, res: Response) => {
-
         await validateWebhookRequest(req);
-        
+
+        const event = req.headers["x-github-event"] as string;
+        if (event != "push") {
+            return res.status(200).json(`Event : ${event} recieved`);
+        }
+
         const repoId = req.body.repository.id;
-        
-        return res.status(200).json({ success: true });
+        await backupRepository(repoId);
+
+        return res.status(200).json(`Backup added for ${repoId}`);
     })
 );
 

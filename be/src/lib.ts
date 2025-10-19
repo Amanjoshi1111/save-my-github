@@ -2,7 +2,7 @@ import { RequestError } from "@octokit/request-error";
 import { NextFunction, Request, RequestHandler, Response } from "express";
 import CustomException from "./CustomException.js";
 import { Octokit } from "@octokit/rest";
-import { githubTokenHeader } from "./constants.js";
+import { GITHUB_TOKEN_HEADER } from "./constants.js";
 
 export const octokitConfig = (auth: string): Octokit => {
     return new Octokit({
@@ -33,7 +33,7 @@ export async function safeOctokitRequest<T>(fn: () => Promise<T>): Promise<T> {
 
 export const validateGithubToken = asyncHandler(
     async (req: Request, res: Response, next: NextFunction) => {
-        const githubToken: string = req.headers[githubTokenHeader] as string;
+        const githubToken: string = req.headers[GITHUB_TOKEN_HEADER] as string;
 
         if (githubToken == undefined) {
             throw new CustomException("BE002");

@@ -7,8 +7,8 @@ import path from "path";
 import { prisma } from "../prisma.js";
 import CustomException from "../CustomException.js";
 import z from "zod";
-import { githubTokenHeader } from "../constants.js";
 import { fetchRepoList, registerWebhook } from "../services/githubService.js";
+import { GITHUB_TOKEN_HEADER } from "../constants.js";
 
 const webhookSchema = z.object({
     repoId: z.number().positive(),
@@ -97,7 +97,7 @@ export default repoRouter
             async (req: Request, res: Response, next: NextFunction) => {
                 const { repoId } = webhookSchema.parse(req.body);
                 const octokit = req.octokit as Octokit;
-                const githubToken = req.headers[githubTokenHeader] as string;
+                const githubToken = req.headers[GITHUB_TOKEN_HEADER] as string;
 
                 const repoName = await registerWebhook(
                     repoId,
