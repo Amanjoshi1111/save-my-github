@@ -1,6 +1,6 @@
 import { Octokit } from "@octokit/rest";
-import { safeOctokitRequest } from "../lib.js";
-import { prisma } from "../prisma.js";
+import { safeOctokitRequest } from "../lib/helper.js";
+import { prisma } from "../lib/prisma.js";
 import crypto from "crypto";
 
 type RepoSummary = {

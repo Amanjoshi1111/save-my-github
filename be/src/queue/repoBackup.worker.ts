@@ -1,5 +1,5 @@
 import { Worker } from "bullmq";
-import { REPOSITORY_BACKUP_QUEUE } from "../constants.js";
+import { REPOSITORY_BACKUP_QUEUE } from "../lib/constants.js";
 import dotenv from "dotenv";
 dotenv.config();
 

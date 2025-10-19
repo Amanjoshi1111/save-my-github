@@ -1,11 +1,11 @@
 import express from "express";
 import cors from "cors";
 import type { Request, Response, Express, NextFunction } from "express";
-import CustomException from "./CustomException.js";
+import CustomException from "./errorHandling/CustomException.js";
 import { Prisma } from "@prisma/client";
 import webhookRouter from "./controllers/webhookRoutes.js";
 import repoRouter from "./controllers/repoRoutes.js";
-import { validateGithubToken } from "./lib.js";
+import { validateGithubToken } from "./lib/helper.js";
 
 const app: Express = express();
 

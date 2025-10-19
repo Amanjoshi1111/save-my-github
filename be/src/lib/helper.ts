@@ -1,6 +1,6 @@
 import { RequestError } from "@octokit/request-error";
 import { NextFunction, Request, RequestHandler, Response } from "express";
-import CustomException from "./CustomException.js";
+import CustomException from "../errorHandling/CustomException.js";
 import { Octokit } from "@octokit/rest";
 import { GITHUB_TOKEN_HEADER } from "./constants.js";
 

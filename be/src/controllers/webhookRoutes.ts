@@ -1,7 +1,7 @@
-import { asyncHandler } from "../lib.js";
+import { asyncHandler } from "../lib/helper.js";
 import { Request, Response, Router } from "express";
-import { prisma } from "../prisma.js";
-import CustomException from "../CustomException.js";
+import { prisma } from "../lib/prisma.js";
+import CustomException from "../errorHandling/CustomException.js";
 import { Webhooks } from "@octokit/webhooks";
 import { backupRepository } from "../services/backupService.js";
 

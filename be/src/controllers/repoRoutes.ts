@@ -1,14 +1,14 @@
 import { NextFunction, Request, Response, Router } from "express";
-import { asyncHandler, safeOctokitRequest } from "../lib.js";
+import { asyncHandler, safeOctokitRequest } from "../lib/helper.js";
 import { Worker } from "worker_threads";
 import { Octokit } from "@octokit/rest";
 import { fileURLToPath } from "url";
 import path from "path";
-import { prisma } from "../prisma.js";
-import CustomException from "../CustomException.js";
+import { prisma } from "../lib/prisma.js";
+import CustomException from "../errorHandling/CustomException.js";
 import z from "zod";
 import { fetchRepoList, registerWebhook } from "../services/githubService.js";
-import { GITHUB_TOKEN_HEADER } from "../constants.js";
+import { GITHUB_TOKEN_HEADER } from "../lib/constants.js";
 
 const webhookSchema = z.object({
     repoId: z.number().positive(),
