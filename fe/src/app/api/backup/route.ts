@@ -1,5 +1,4 @@
 import { getGithubAccessToken } from "@/lib/github";
-import { toLowerCase } from "better-auth";
 import { NextRequest, NextResponse } from "next/server";
 import axios from "axios";
 
