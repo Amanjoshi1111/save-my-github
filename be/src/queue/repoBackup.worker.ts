@@ -16,7 +16,7 @@ const worker = new Worker(
     {
         connection: {
             host: process.env.REDIS_URL,
-            port: Number(process.env.REDIS_PORT),
+            port: Number(process.env.REDIS_PORT)
         },
     }
 );

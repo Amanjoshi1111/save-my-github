@@ -1,9 +1,10 @@
-import app from "./server.js";
+import { server } from "./server.js";
+import "./wsHandler.js";
 import dotenv from "dotenv";
 dotenv.config();
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.HTTP_PORT || 3001;
 
-app.listen(PORT, () => {
+server.listen(PORT, () => {
     console.log("Server is running on PORT: ", PORT);
 });

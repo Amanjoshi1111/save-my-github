@@ -1,77 +1,38 @@
 import express from "express";
-import cors from "cors";
-import type { Request, Response, Express, NextFunction } from "express";
-import CustomException from "./errorHandling/CustomException.js";
-import { Prisma } from "@prisma/client";
+import type { Express } from "express";
 import webhookRouter from "./controllers/webhookRoutes.js";
 import repoRouter from "./controllers/repoRoutes.js";
 import { validateGithubToken } from "./lib/helper.js";
+import { Server } from "socket.io";
+import { createServer } from "node:http";
+import { toNodeHandler } from "better-auth/node";
+import { auth } from "./lib/auth.js";
+import {
+    corsMiddleware,
+    customResponse,
+    errorHandler,
+    me,
+    requireAuth,
+} from "./middleware.js";
 
 const app: Express = express();
+const server = createServer(app);
+const io = new Server(server, {
+    cors: {
+        origin: "http://localhost:3001",
+        credentials: true,
+    },
+});
 
-app.use(cors());
+app.use(corsMiddleware);
+app.all("/api/auth/**", toNodeHandler(auth));
 app.use(express.json());
 
-app.use("/webhook", webhookRouter);
-app.use("/",validateGithubToken, repoRouter);
+app.get("/api/me", requireAuth, me);
+app.use("/webhook", requireAuth, webhookRouter);
+app.use("/github", requireAuth, validateGithubToken, repoRouter);
 
-// Global response formatter
-app.use((req: Request, res: Response, next: NextFunction) => {
-    const oldJson = res.json;
-    res.json = function (data: any) {
-        const formatted = {
-            code: "BE000",
-            status: res.statusCode,
-            data,
-        };
-        return oldJson.call(this, formatted);
-    };
-    next();
-});
+app.use(customResponse);
+app.use(errorHandler);
 
-// Global error handler
-app.use((err: any, req: Request, res: Response, next: NextFunction) => {
-    console.log("Error : ", err);
-
-    if (err instanceof CustomException) {
-        return res.status(err.status).json({
-            code: err.code,
-            message: err.message,
-        });
-    }
-
-    if (err instanceof Prisma.PrismaClientKnownRequestError) {
-        // unique constraint violation, foreign key violation
-        return res.status(400).json({
-            code: "BE400",
-            message: err.message,
-        });
-    }
-
-    if (err instanceof Prisma.PrismaClientValidationError) {
-        // Invalid query shape or missing required fields
-        return res.status(400).json({
-            code: "BE400",
-            message: err.message,
-        });
-    }
-
-    if (
-        err instanceof Prisma.PrismaClientUnknownRequestError ||
-        err instanceof Prisma.PrismaClientRustPanicError ||
-        err instanceof Prisma.PrismaClientInitializationError
-    ) {
-        // Unexpected server or Prisma internal errors
-        return res.status(500).json({
-            code: "BE099",
-            message: "INTERNAL SERVER ERROR",
-        });
-    }
-
-    return res.status(500).json({
-        code: "BE099",
-        message: "INTERNAL SERVER ERROR",
-    });
-});
-
-export default app;
+export { server, io };
