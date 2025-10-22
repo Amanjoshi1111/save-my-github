@@ -1,28 +1,56 @@
 import { asyncHandler } from "../lib/helper.js";
-import { Request, Response, Router } from "express";
+import { NextFunction, Request, Response, Router } from "express";
 import { prisma } from "../lib/prisma.js";
 import CustomException from "../errorHandling/CustomException.js";
 import { Webhooks } from "@octokit/webhooks";
-import { backupRepository } from "../services/backupService.js";
+import { backupRepository } from "../services/uploadService.js";
+import { registerWebhook } from "../services/githubService.js";
+import z from "zod";
+import { GITHUB_TOKEN_HEADER } from "../lib/constants.js";
+import { Octokit } from "@octokit/rest";
 
 const webhookRouter: Router = Router();
 
-export default webhookRouter.post(
-    "/github",
-    asyncHandler(async (req: Request, res: Response) => {
-        await validateWebhookRequest(req);
+const webhookSchema = z.object({
+    repoId: z.number().positive(),
+});
 
-        const event = req.headers["x-github-event"] as string;
-        if (event != "push") {
-            return res.status(200).json(`Event : ${event} recieved`);
-        }
+export default webhookRouter
+    .post(
+        "/backup",
+        asyncHandler(async (req: Request, res: Response) => {
+            await validateWebhookRequest(req);
+            const event = req.headers["x-github-event"] as string;
+            if (event != "push") {
+                return res.status(200).json(`Event : ${event} recieved`);
+            }
 
-        const repoId = req.body.repository.id;
-        await backupRepository(repoId);
+            const repoId = req.body.repository.id;
+            await backupRepository(repoId, "webhook");
 
-        return res.status(200).json(`Backup added for ${repoId}`);
-    })
-);
+            return res.status(200).json(`Backup added for ${repoId}`);
+        })
+    )
+    .post(
+        "/register",
+        asyncHandler(
+            async (req: Request, res: Response, next: NextFunction) => {
+                const { repoId } = webhookSchema.parse(req.body);
+                const octokit = req.octokit as Octokit;
+                const githubToken = req.githubToken as string;
+
+                const repoName = await registerWebhook(
+                    repoId,
+                    githubToken,
+                    octokit
+                );
+
+                res.json({
+                    message: `Webhook created for ${repoName}`,
+                });
+            }
+        )
+    );
 
 async function validateWebhookRequest(req: Request) {
     const signature = req.headers["x-hub-signature-256"] as string;

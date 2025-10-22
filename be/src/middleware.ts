@@ -3,8 +3,14 @@ import CustomException from "./errorHandling/CustomException.js";
 import { Prisma } from "@prisma/client";
 import { fromNodeHeaders } from "better-auth/node";
 import { auth, SessionType, UserType } from "./lib/auth.js";
-import { asyncHandler } from "./lib/helper.js";
+import {
+    asyncHandler,
+    octokitConfig,
+    safeOctokitRequest,
+} from "./lib/helper.js";
 import cors from "cors";
+import { GITHUB_TOKEN_HEADER } from "./lib/constants.js";
+import { prisma } from "./lib/prisma.js";
 
 export const errorHandler = (
     err: any,
@@ -102,3 +108,38 @@ export const me = asyncHandler(async (req, res) => {
     });
     return res.json(session);
 });
+
+export const validateGithubToken = asyncHandler(
+    async (req: Request, res: Response, next: NextFunction) => {
+        const user = req.user;
+
+        if (!user?.id) {
+            throw new CustomException("BE006");
+        }
+
+        const account = await prisma.account.findFirst({
+            where: {
+                userId: user?.id,
+                providerId: "github",
+            },
+        });
+
+        const githubToken = account?.accessToken;
+
+        if (githubToken == undefined) {
+            throw new CustomException("BE002");
+        }
+
+        const octokit = octokitConfig(githubToken);
+
+        const { data: repo } = await safeOctokitRequest(() =>
+            octokit.request("GET /user")
+        );
+
+        req.octokit = octokit;
+        req.githubToken = githubToken;
+        req.githubUser = repo.login;
+
+        next();
+    }
+);

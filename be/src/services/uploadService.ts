@@ -11,6 +11,9 @@ import {
     PutObjectCommand,
     S3Client,
 } from "@aws-sdk/client-s3";
+import { Job } from "bullmq";
+import { BackupType } from "../types/type.js";
+import { github } from "better-auth/social-providers";
 
 const s3Client = new S3Client({
     region: "ap-south-1",
@@ -20,21 +23,31 @@ const s3Client = new S3Client({
     },
 });
 
-export async function backupRepository(repoId: number) {
-    return await RepoBackup.add(repoId);
+export async function backupRepository(
+    repoId: number,
+    type: BackupType,
+    githubToken?: string
+) {
+    return await RepoBackup.add(repoId, type);
 }
 
 // This function will be used by queue worker to start repository backup
-export async function initBackup(repoId: number) {
-    const data = await prisma.githubWebhook.findUnique({
-        where: { repoId },
-    });
+export async function initBackup(job: Job) {
+    const repoId = job.data.repoId;
+    const type: BackupType = job.data.type;
+    let githubToken = job.data.githubToken as string;
 
-    if (!data) {
-        throw new Error(`No entry present in db for RepoId : ${repoId}`);
+    if (type == "webhook") {
+        const data = await prisma.githubWebhook.findUnique({
+            where: { repoId },
+        });
+
+        if (!data) {
+            throw new Error(`No entry present in db for RepoId : ${repoId}`);
+        }
+        githubToken = data.accessToken;
     }
 
-    const githubToken = data.accessToken;
     const octokit = octokitConfig(githubToken);
 
     const { repoName, fileName, filePath, owner } = await downloadZipFile(

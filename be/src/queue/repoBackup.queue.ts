@@ -1,18 +1,20 @@
 import { Queue, Worker } from "bullmq";
 import { REPOSITORY_BACKUP_QUEUE } from "../lib/constants.js";
 import dotenv from "dotenv";
+import { BackupType } from "../types/type.js";
 dotenv.config();
 
 export default class RepoBackup {
     private static queue = new Queue(REPOSITORY_BACKUP_QUEUE, {
         connection: {
             host: process.env.REDIS_URL,
-            port: Number(process.env.REDIS_PORT)
+            port: Number(process.env.REDIS_PORT),
         },
     });
 
-    public static async add(repoId: number) {
-        const jobId = `backup_${repoId}`;
+    public static async add(repoId: number, type: BackupType, githubToken?: string) {
+
+        const jobId = `backup_${repoId}_${type}`;
         const existingJob = await this.queue.getJob(jobId);
 
         if (existingJob) {
@@ -26,7 +28,7 @@ export default class RepoBackup {
         const jobName = `backup:${repoId}`;
         const job = await this.queue.add(
             jobName,
-            { repoId },
+            { repoId, type , githubToken},
             {
                 jobId,
                 attempts: 2,

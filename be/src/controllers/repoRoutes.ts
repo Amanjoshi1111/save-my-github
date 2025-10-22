@@ -15,10 +15,6 @@ import { fetchRepoList, registerWebhook } from "../services/githubService.js";
 import { GITHUB_TOKEN_HEADER } from "../lib/constants.js";
 import RepoBackup from "../queue/repoBackup.queue.js";
 
-const webhookSchema = z.object({
-    repoId: z.number().positive(),
-});
-
 const repoRouter: Router = Router();
 
 export default repoRouter
@@ -34,18 +30,21 @@ export default repoRouter
         })
     )
     .post(
-        "/backup/:repoId",
+        "/instantBackup/:repoId",
         asyncHandler(
             async (req: Request, res: Response, next: NextFunction) => {
                 const { repoId } = req.params;
                 const repoIdNum = Number(repoId);
 
-                const githubToken = req.githubToken as string;
                 const octokit = req.octokit as Octokit;
                 const githubUser = req.githubUser as string;
+                const githubToken = req.githubToken;
 
                 if (isNaN(repoIdNum)) {
-                    throw new CustomException("BE004", "RepoId should be a valid number");
+                    throw new CustomException(
+                        "BE004",
+                        "RepoId should be a valid number"
+                    );
                 }
 
                 const { data: repoList } = await safeOctokitRequest(() =>
@@ -57,34 +56,21 @@ export default repoRouter
                 const repoData = repoList.find((r) => r.id === repoIdNum);
 
                 if (!repoData) {
-                    throw new CustomException("BE004", "No such repo present for given repoId");
+                    throw new CustomException(
+                        "BE004",
+                        "No such repo present for given repoId"
+                    );
                 }
 
-                const job = await RepoBackup.add(Number(repoId));
+                const job = await RepoBackup.add(
+                    Number(repoId),
+                    "instant",
+                    githubToken
+                );
 
                 return res
                     .status(200)
                     .send({ message: "Pushed to queue", jobId: job.id });
-            }
-        )
-    )
-    .post(
-        "/register/githubWebhook",
-        asyncHandler(
-            async (req: Request, res: Response, next: NextFunction) => {
-                const { repoId } = webhookSchema.parse(req.body);
-                const octokit = req.octokit as Octokit;
-                const githubToken = req.headers[GITHUB_TOKEN_HEADER] as string;
-
-                const repoName = await registerWebhook(
-                    repoId,
-                    githubToken,
-                    octokit
-                );
-
-                res.json({
-                    message: `Webhook created for ${repoName}`,
-                });
             }
         )
     );

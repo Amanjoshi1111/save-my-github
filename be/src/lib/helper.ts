@@ -31,24 +31,5 @@ export async function safeOctokitRequest<T>(fn: () => Promise<T>): Promise<T> {
     }
 }
 
-export const validateGithubToken = asyncHandler(
-    async (req: Request, res: Response, next: NextFunction) => {
-        const githubToken: string = req.headers[GITHUB_TOKEN_HEADER] as string;
 
-        if (githubToken == undefined) {
-            throw new CustomException("BE002");
-        }
 
-        const octokit = octokitConfig(githubToken);
-
-        const { data: repo } = await safeOctokitRequest(() =>
-            octokit.request("GET /user")
-        );
-
-        req.octokit = octokit;
-        req.githubToken = githubToken;
-        req.githubUser = repo.login;
-
-        next();
-    }
-);
